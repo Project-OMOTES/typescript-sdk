@@ -1,3 +1,3 @@
 export function computeEngine(): string {
-  return 'compute-engine-ftw';
+  return 'compute-engine';
 }
