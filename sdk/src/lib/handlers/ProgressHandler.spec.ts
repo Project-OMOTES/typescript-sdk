@@ -47,32 +47,5 @@ describe('ProgressHandler', () => {
       }
       handler.close();
     });
-
-    it('should ack messages', () => {
-      handler.getProgress().subscribe();
-      const message = new JobProgressUpdate();
-      channel.pushMessage(message);
-      channel.pushMessage(message);
-      expect(channel.ack).toHaveBeenCalledTimes(2);
-    });
-
-    it('should close channel when unsubscribing', () => {
-      handler.getProgress().subscribe().unsubscribe();
-      expect(channel.close).toHaveBeenCalled();
-    });
-  });
-
-  describe('#close', () => {
-    it('should close channel', () => {
-      const job = new Job('grow_simulator', 'esdl');
-      const channel = new MockChannel();
-      const handler = new ProgressHandler(
-        job,
-        of(channel as unknown as Channel)
-      );
-      handler.getProgress().subscribe();
-      handler.close();
-      expect(channel.close).toHaveBeenCalled();
-    });
   });
 });

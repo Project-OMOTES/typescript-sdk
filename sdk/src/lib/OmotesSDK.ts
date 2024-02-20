@@ -2,7 +2,9 @@ import { Connection, connect } from 'amqplib';
 import { from } from 'rxjs';
 import { Job } from './Job';
 import { ProgressHandler } from './handlers/ProgressHandler';
-import { getProgressQueue, getSubmissionQueue } from './queue';
+import { ResultsHandler } from './handlers/ResultsHandler';
+import { StatusHandler } from './handlers/StatusHandler';
+import { getProgressQueue, getResultsQueue, getStatusQueue, getSubmissionQueue } from './queue';
 import { JobTypeName, OmotesSDKOptions } from './types';
 
 export class OmotesSDK {
@@ -38,11 +40,11 @@ export class OmotesSDK {
   }
 
   public getResultsHandler(job: Job) {
-    throw new Error('Not implemented');
+    return new ResultsHandler(job, from(this.getChannel(getResultsQueue(job))));
   }
 
   public getStatusHandler(job: Job) {
-    throw new Error('Not implemented');
+    return new StatusHandler(job, from(this.getChannel(getStatusQueue(job))));
   }
 
   private async getChannel(queue: string) {
