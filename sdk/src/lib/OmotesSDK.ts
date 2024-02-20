@@ -1,10 +1,11 @@
 import { Connection, connect } from 'amqplib';
-import { QueueManager } from './QueueManager';
+import { from } from 'rxjs';
+import { Job } from './Job';
+import { ProgressHandler } from './handlers/ProgressHandler';
+import { getProgressQueue, getSubmissionQueue } from './queue';
 import { JobTypeName, OmotesSDKOptions } from './types';
 
 export class OmotesSDK {
-  private static readonly queueManager = new QueueManager();
-
   private _connection: Connection | null = null;
   private get connection() {
     if (!this._connection) {
@@ -25,9 +26,23 @@ export class OmotesSDK {
   }
 
   public async submitJob(type: JobTypeName, esdl: string) {
-    const queue = OmotesSDK.queueManager.getSubmissionQueue(type);
+    const queue = getSubmissionQueue(type);
+    const job = new Job(type, esdl);
     const channel = await this.getChannel(queue);
-    channel.sendToQueue(queue, Buffer.from(esdl));
+    channel.sendToQueue(queue, Buffer.from(job.toBuffer()));
+    return job;
+  }
+
+  public getProgressHandler(job: Job) {
+    return new ProgressHandler(job, from(this.getChannel(getProgressQueue(job))));
+  }
+
+  public getResultsHandler(job: Job) {
+    throw new Error('Not implemented');
+  }
+
+  public getStatusHandler(job: Job) {
+    throw new Error('Not implemented');
   }
 
   private async getChannel(queue: string) {

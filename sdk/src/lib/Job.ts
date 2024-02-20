@@ -1,19 +1,22 @@
-import { Observable } from 'rxjs';
+import { JobSubmission } from '@omotes/proto';
 import { uuidv7 } from 'uuidv7';
 import { JobTypeName } from './types';
 
 export class Job {
   public readonly uuid = uuidv7();
-  constructor(
-    public readonly type: JobTypeName
-  ) { }
+  private readonly jobSubmission = new JobSubmission();
 
-  public getProgress() {
-    return new Observable((subscriber) => {
-      subscriber.next(0);
-      subscriber.next(50);
-      subscriber.next(100);
-      subscriber.complete();
-    });
+  constructor(
+    public readonly type: JobTypeName,
+    esdl: string
+  ) {
+    this.jobSubmission.setUuid(this.uuid);
+    this.jobSubmission.setWorkflowType(type);
+    this.jobSubmission.setEsdl(esdl);
+    this.jobSubmission.setTimeoutMs(0);
+  }
+
+  public toBuffer() {
+    return this.jobSubmission.serializeBinary();
   }
 }

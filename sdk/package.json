@@ -9,7 +9,9 @@
     "rxjs": "7.8.1",
     "amqplib": "0.10.3",
     "uuidv7": "0.6.3",
-    "tslib": "2.6.2"
+    "tslib": "2.6.2",
+    "@omotes/proto": "0.0.1",
+    "google-protobuf": "^3.21.2"
   },
   "type": "module",
   "main": "./src/index.js",
