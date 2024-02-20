@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message TaskResult {
+  string job_id = 1;
+  string celery_task_id = 2;
+  string celery_task_type = 6;
+  ResultType result_type = 3;
+  optional bytes output_esdl = 4;
+  string logs = 5;
+
+  enum ResultType {
+    SUCCEEDED = 0;
+    ERROR = 1;
+  }
+}
+
+message TaskProgressUpdate {
+  string job_id = 1;
+  string celery_task_id = 2;
+  string celery_task_type = 5;
+  double progress = 3;
+  string message = 4;
+}

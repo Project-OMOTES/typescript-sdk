@@ -1,0 +1,11 @@
+{
+  "name": "@omotes/proto",
+  "version": "0.0.1",
+  "dependencies": {
+    "google-protobuf": "3.21.2",
+    "tslib": "2.6.2"
+  },
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}

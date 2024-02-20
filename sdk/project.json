@@ -1,0 +1,40 @@
+{
+  "name": "sdk",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "sdk/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": ["lint", "test"],
+      "options": {
+        "outputPath": "dist/sdk",
+        "main": "sdk/src/index.ts",
+        "tsConfig": "sdk/tsconfig.lib.json",
+        "assets": ["sdk/*.md"]
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs sdk {args.ver} {args.tag}",
+      "dependsOn": ["build"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "sdk/jest.config.ts",
+        "codeCoverage": true
+      }
+    },
+    "test:watch": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "sdk/jest.config.ts",
+        "codeCoverage": true,
+        "watch": true
+      }
+    }
+  },
+  "tags": ["omotes", "sdk"]
+}

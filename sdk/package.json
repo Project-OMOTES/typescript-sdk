@@ -1,0 +1,16 @@
+{
+  "name": "@omotes/sdk",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Project-OMOTES/typescript-sdk"
+  },
+  "dependencies": {
+    "rxjs": "7.8.1",
+    "amqplib": "0.10.3",
+    "uuidv7": "0.6.3"
+  },
+  "type": "module",
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts"
+}
