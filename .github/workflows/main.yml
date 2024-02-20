@@ -19,4 +19,4 @@ jobs:
           cache: 'npm'
       - uses: arduino/setup-protoc@v3
       - run: npm ci
-      - run: npx nx affected -t build --parallel=3
+      - run: npx nx affected -t build --parallel=3 --with-deps
