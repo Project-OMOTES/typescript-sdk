@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+      - uses: arduino/setup-protoc@v3
       - run: npm ci
 
       - run: npx nx affected -t lint --parallel=3
