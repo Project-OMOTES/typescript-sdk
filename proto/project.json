@@ -12,7 +12,7 @@
         "outputPath": "dist/proto",
         "main": "proto/src/index.ts",
         "tsConfig": "proto/tsconfig.lib.json",
-        "assets": ["proto/*.md"]
+        "assets": ["proto/*.md", "proto/src/lib/generated/**/*.d.ts"]
       }
     },
     "protogen": {

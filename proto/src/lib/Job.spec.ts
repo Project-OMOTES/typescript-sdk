@@ -7,7 +7,6 @@ describe('Job', () => {
       submission.setUuid('uuid');
       submission.setEsdl('esdl');
       submission.setWorkflowType('workflowType');
-      console.log(submission.serializeBinary());
       expect(submission.toObject()).toEqual({
         uuid: 'uuid',
         esdl: 'esdl',
