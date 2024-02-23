@@ -13,14 +13,17 @@ describe('Job', () => {
         timeoutMs: 0,
         workflowType: 'workflowType',
       });
+      console.log(submission.serializeBinary());
       expect(submission.serializeBinary()).toEqual(expect.any(Uint8Array));
     });
 
     it('should deserialize from binary', () => {
-      const bytes = new Uint8Array([10, 4, 117, 117, 105, 100, 26,
+      const bytes = new Uint8Array([
+        10, 4, 117, 117, 105, 100, 26,
         12, 119, 111, 114, 107, 102, 108,
         111, 119, 84, 121, 112, 101, 34,
-        3, 122, 199, 101]);
+        4, 101, 115, 100, 108
+      ]);
       const submission = JobSubmission.deserializeBinary(bytes);
       expect(submission.toObject()).toEqual({
         uuid: 'uuid',

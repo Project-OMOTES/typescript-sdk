@@ -5,4 +5,4 @@ export type OmotesSDKOptions = {
   rabbitMQPort: number;
 };
 
-export type JobTypeName = 'grow_simulator' | 'grow_optimizer';
+export type JobTypeName = 'grow_simulator' | 'simulator' | 'grow_optimizer';

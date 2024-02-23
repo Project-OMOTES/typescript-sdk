@@ -9,10 +9,14 @@ export function getProgressQueue(job: Job) {
   return `jobs.${job.uuid}.progress`;
 }
 
-export function getResultsQueue(job: Job) {
-  return `jobs.${job.uuid}.results`;
+export function getResultQueue(job: Job) {
+  return `jobs.${job.uuid}.result`;
 }
 
 export function getStatusQueue(job: Job) {
   return `jobs.${job.uuid}.status`;
+}
+
+export function getCancelQueue(job: Job) {
+  return `jobs.${job.uuid}.cancel`;
 }

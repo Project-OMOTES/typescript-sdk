@@ -1,30 +1,22 @@
 import { JobResult } from '@omotes/proto';
-import { Channel } from 'amqplib';
+import { Channel, Connection } from 'amqplib';
 import { of } from 'rxjs';
-import { MockChannel } from '../../util/MockChannel.spec';
+import { MockChannel, MockConnection } from '../../util/MockChannel.spec';
 import { Job } from '../Job';
-import { ResultsHandler } from './ResultsHandler';
+import { ResultHandler } from './ResultHandler';
 
 describe('ResultsHandler', () => {
-  describe('constructor', () => {
-    it('should create', () => {
-      const handler = new ResultsHandler(
-        new Job('grow_simulator', 'esdl'),
-        of(new MockChannel() as unknown as Channel)
-      );
-      expect(handler).toBeDefined();
-    });
-  });
-
   describe('#getResult', () => {
     let job: Job;
     let channel: MockChannel<JobResult>;
-    let handler: ResultsHandler;
+    let connection: MockConnection;
+    let handler: ResultHandler;
 
     beforeEach(() => {
-      job = new Job('grow_simulator', 'esdl');
       channel = new MockChannel();
-      handler = new ResultsHandler(
+      connection = new MockConnection();
+      job = new Job('grow_simulator', 'esdl', connection as unknown as Connection, channel as unknown as Channel);
+      handler = new ResultHandler(
         job,
         of(channel as unknown as Channel)
       );
@@ -35,7 +27,7 @@ describe('ResultsHandler', () => {
         expect(result).toEqual({
           uuid: 'uuid',
           logs: 'logs',
-          outputEsdl: Buffer.from('output_esdl').toString('base64'),
+          outputEsdl: 'output_esdl',
           resultType: JobResult.ResultType.SUCCEEDED
         });
         done();
@@ -43,8 +35,7 @@ describe('ResultsHandler', () => {
       const message = new JobResult();
       message.setUuid('uuid');
       message.setLogs('logs');
-      const encoder = new TextEncoder();
-      message.setOutputEsdl(encoder.encode('output_esdl'));
+      message.setOutputEsdl('output_esdl');
       message.setResultType(JobResult.ResultType.SUCCEEDED);
       channel.pushMessage(message);
     });

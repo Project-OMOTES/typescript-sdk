@@ -4,13 +4,13 @@ message JobSubmission {
   string uuid = 1;
   optional uint32 timeout_ms = 2;
   string workflow_type = 3;
-  bytes esdl = 4;
+  string esdl = 4; // Raw XML string
 }
 
 message JobResult {
   string uuid = 1;
   ResultType result_type = 2;
-  optional bytes output_esdl = 3;
+  optional string output_esdl = 3; // Raw XML string
   string logs = 4;
 
   enum ResultType {

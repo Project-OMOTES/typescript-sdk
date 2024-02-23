@@ -1,10 +1,10 @@
 import { JobResult } from '@omotes/proto';
 import { first, map } from 'rxjs';
-import { getResultsQueue } from '../queue';
+import { getResultQueue } from '../queue';
 import { Handler } from './Handler';
 
-export class ResultsHandler extends Handler {
-  protected override queue: string = getResultsQueue(this.job);
+export class ResultHandler extends Handler {
+  protected override queue: string = getResultQueue(this.job);
 
   public getResult() {
     const messages$ = this.channelToRx().pipe(first());

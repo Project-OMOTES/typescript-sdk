@@ -1,7 +1,7 @@
 import { JobSubmission } from '@omotes/proto';
-import { Channel } from 'amqplib';
+import { Channel, Connection } from 'amqplib';
 import { of } from 'rxjs';
-import { MockChannel } from '../../util/MockChannel.spec';
+import { MockChannel, MockConnection } from '../../util/MockChannel.spec';
 import { Job } from '../Job';
 import { Handler } from './Handler';
 
@@ -16,10 +16,12 @@ describe('Handler', () => {
   let handler: ConcreteHandler;
   let job: Job;
   let channel: MockChannel<JobSubmission>;
+  let connection: MockConnection;
 
   beforeEach(() => {
-    job = new Job('grow_simulator', 'esdl');
     channel = new MockChannel();
+    connection = new MockConnection();
+    job = new Job('grow_simulator', 'esdl', connection as unknown as Connection, channel as unknown as Channel);
     handler = new ConcreteHandler(job, of(channel as unknown as Channel));
   });
 
@@ -31,14 +33,14 @@ describe('Handler', () => {
     expect(channel.ack).toHaveBeenCalledTimes(2);
   });
 
-  it('should close channel when unsubscribing', () => {
+  it('should delete queue unsubscribing', () => {
     handler.getStream().subscribe().unsubscribe();
-    expect(channel.close).toHaveBeenCalled();
+    expect(channel.deleteQueue).toHaveBeenCalled();
   });
 
-  it('should close', () => {
+  it('should delete queue when calling #close', () => {
     handler.getStream().subscribe();
     handler.close();
-    expect(channel.close).toHaveBeenCalled();
+    expect(channel.deleteQueue).toHaveBeenCalled();
   });
 });

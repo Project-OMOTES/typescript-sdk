@@ -161,7 +161,7 @@ proto.JobSubmission.toObject = function(includeInstance, msg) {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     timeoutMs: jspb.Message.getFieldWithDefault(msg, 2, 0),
     workflowType: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    esdl: msg.getEsdl_asB64()
+    esdl: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -211,7 +211,7 @@ proto.JobSubmission.deserializeBinaryFromReader = function(msg, reader) {
       msg.setWorkflowType(value);
       break;
     case 4:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      var value = /** @type {string} */ (reader.readString());
       msg.setEsdl(value);
       break;
     default:
@@ -264,9 +264,9 @@ proto.JobSubmission.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getEsdl_asU8();
+  f = message.getEsdl();
   if (f.length > 0) {
-    writer.writeBytes(
+    writer.writeString(
       4,
       f
     );
@@ -347,44 +347,20 @@ proto.JobSubmission.prototype.setWorkflowType = function(value) {
 
 
 /**
- * optional bytes esdl = 4;
- * @return {!(string|Uint8Array)}
- */
-proto.JobSubmission.prototype.getEsdl = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
-};
-
-
-/**
- * optional bytes esdl = 4;
- * This is a type-conversion wrapper around `getEsdl()`
+ * optional string esdl = 4;
  * @return {string}
  */
-proto.JobSubmission.prototype.getEsdl_asB64 = function() {
-  return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getEsdl()));
+proto.JobSubmission.prototype.getEsdl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
 };
 
 
 /**
- * optional bytes esdl = 4;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getEsdl()`
- * @return {!Uint8Array}
- */
-proto.JobSubmission.prototype.getEsdl_asU8 = function() {
-  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getEsdl()));
-};
-
-
-/**
- * @param {!(string|Uint8Array)} value
+ * @param {string} value
  * @return {!proto.JobSubmission} returns this
  */
 proto.JobSubmission.prototype.setEsdl = function(value) {
-  return jspb.Message.setProto3BytesField(this, 4, value);
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -422,7 +398,7 @@ proto.JobResult.toObject = function(includeInstance, msg) {
   var f, obj = {
     uuid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     resultType: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    outputEsdl: msg.getOutputEsdl_asB64(),
+    outputEsdl: jspb.Message.getFieldWithDefault(msg, 3, ""),
     logs: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
@@ -469,7 +445,7 @@ proto.JobResult.deserializeBinaryFromReader = function(msg, reader) {
       msg.setResultType(value);
       break;
     case 3:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
+      var value = /** @type {string} */ (reader.readString());
       msg.setOutputEsdl(value);
       break;
     case 4:
@@ -519,9 +495,9 @@ proto.JobResult.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = /** @type {!(string|Uint8Array)} */ (jspb.Message.getField(message, 3));
+  f = /** @type {string} */ (jspb.Message.getField(message, 3));
   if (f != null) {
-    writer.writeBytes(
+    writer.writeString(
       3,
       f
     );
@@ -582,40 +558,16 @@ proto.JobResult.prototype.setResultType = function(value) {
 
 
 /**
- * optional bytes output_esdl = 3;
- * @return {!(string|Uint8Array)}
- */
-proto.JobResult.prototype.getOutputEsdl = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
-};
-
-
-/**
- * optional bytes output_esdl = 3;
- * This is a type-conversion wrapper around `getOutputEsdl()`
+ * optional string output_esdl = 3;
  * @return {string}
  */
-proto.JobResult.prototype.getOutputEsdl_asB64 = function() {
-  return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getOutputEsdl()));
+proto.JobResult.prototype.getOutputEsdl = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /**
- * optional bytes output_esdl = 3;
- * Note that Uint8Array is not supported on all browsers.
- * @see http://caniuse.com/Uint8Array
- * This is a type-conversion wrapper around `getOutputEsdl()`
- * @return {!Uint8Array}
- */
-proto.JobResult.prototype.getOutputEsdl_asU8 = function() {
-  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getOutputEsdl()));
-};
-
-
-/**
- * @param {!(string|Uint8Array)} value
+ * @param {string} value
  * @return {!proto.JobResult} returns this
  */
 proto.JobResult.prototype.setOutputEsdl = function(value) {

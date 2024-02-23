@@ -1,6 +1,11 @@
 import { JobProgressUpdate } from '@omotes/proto';
 import * as jspb from "google-protobuf";
 
+export class MockConnection {
+  public channel = new MockChannel();
+  public readonly createChannel = jest.fn().mockResolvedValue(this.channel);
+}
+
 export class MockChannel<T extends jspb.Message> {
   private pushFn?: (message: { content: Buffer }) => void;
   public readonly consume = jest.fn().mockImplementation((_: string, pushFn: (message: { content: Buffer }) => void) => {
@@ -8,6 +13,9 @@ export class MockChannel<T extends jspb.Message> {
   });
   public close = jest.fn();
   public ack = jest.fn();
+  public assertQueue = jest.fn().mockResolvedValue(null);
+  public deleteQueue = jest.fn();
+  public sendToQueue = jest.fn();
 
   public pushMessage(message: T) {
     if (this.pushFn) {

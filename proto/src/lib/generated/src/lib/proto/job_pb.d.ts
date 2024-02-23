@@ -15,10 +15,8 @@ export class JobSubmission extends jspb.Message {
   getWorkflowType(): string;
   setWorkflowType(value: string): void;
 
-  getEsdl(): Uint8Array | string;
-  getEsdl_asU8(): Uint8Array;
-  getEsdl_asB64(): string;
-  setEsdl(value: Uint8Array | string): void;
+  getEsdl(): string;
+  setEsdl(value: string): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): JobSubmission.AsObject;
@@ -35,7 +33,7 @@ export namespace JobSubmission {
     uuid: string,
     timeoutMs: number,
     workflowType: string,
-    esdl: Uint8Array | string,
+    esdl: string,
   }
 }
 
@@ -48,10 +46,8 @@ export class JobResult extends jspb.Message {
 
   hasOutputEsdl(): boolean;
   clearOutputEsdl(): void;
-  getOutputEsdl(): Uint8Array | string;
-  getOutputEsdl_asU8(): Uint8Array;
-  getOutputEsdl_asB64(): string;
-  setOutputEsdl(value: Uint8Array | string): void;
+  getOutputEsdl(): string;
+  setOutputEsdl(value: string): void;
 
   getLogs(): string;
   setLogs(value: string): void;
@@ -70,7 +66,7 @@ export namespace JobResult {
   export type AsObject = {
     uuid: string,
     resultType: JobResult.ResultTypeMap[keyof JobResult.ResultTypeMap],
-    outputEsdl: Uint8Array | string,
+    outputEsdl: string,
     logs: string,
   }
 
