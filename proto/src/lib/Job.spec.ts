@@ -13,7 +13,6 @@ describe('Job', () => {
         timeoutMs: 0,
         workflowType: 'workflowType',
       });
-      console.log(submission.serializeBinary());
       expect(submission.serializeBinary()).toEqual(expect.any(Uint8Array));
     });
 
