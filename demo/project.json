@@ -16,7 +16,15 @@
         "polyfills": ["zone.js"],
         "tsConfig": "demo/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["demo/src/favicon.ico", "demo/src/assets"],
+        "assets": [
+          "demo/src/favicon.ico",
+          "demo/src/assets",
+          {
+            "glob": "**/*",
+            "input": "node_modules/monaco-editor",
+            "output": "/assets/monaco/"
+          }
+        ],
         "styles": ["demo/src/styles.scss"],
         "scripts": []
       },
@@ -51,7 +59,8 @@
           "buildTarget": "demo:build:production"
         },
         "development": {
-          "buildTarget": "demo:build:development"
+          "buildTarget": "demo:build:development",
+          "proxyConfig": "demo/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

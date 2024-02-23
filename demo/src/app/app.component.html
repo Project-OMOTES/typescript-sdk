@@ -1,1 +1,46 @@
-<app-nx-welcome></app-nx-welcome>
+<mat-toolbar color="primary" class="mat-elevation-z6">
+  <span>ESDL SDK demo</span>
+</mat-toolbar>
+
+<section class="content">
+  <mat-card [formGroup]="form">
+   <mat-card-header>
+    <mat-card-title>
+      <h2>Input ESDL</h2>
+    </mat-card-title>
+   </mat-card-header>
+   <mat-card-content>
+    <ngx-monaco-editor formControlName="esdl" [options]="{ theme: 'vs-dark', language: 'xml' }" (onInit)="onEditorLoad()"></ngx-monaco-editor>
+    <mat-divider></mat-divider>
+    <mat-form-field appearance="outline">
+      <mat-label>Model type</mat-label>
+      <mat-select formControlName="jobType">
+        <mat-option value="grow_optimizer">GROW Optimizer</mat-option>
+        <mat-option value="grow_simulator">GROW Simulator</mat-option>
+        <mat-option value="simulator">Simulator</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+   </mat-card-content>
+   <mat-card-actions align="end">
+    <button mat-button (click)="reset()">RESET</button>
+    <button mat-button color="primary" (click)="submit()" [disabled]="form.invalid || (loading$ | async)">SUBMIT</button>
+   </mat-card-actions>
+   <mat-card-footer>
+    <mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
+   </mat-card-footer>
+  </mat-card>
+  <mat-divider></mat-divider>
+  <section class="result">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h2>Output ESDL</h2>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ngx-monaco-editor *ngIf="result$ | async as result" [options]="{ theme: 'vs-dark', language: 'xml' }" [ngModel]="result.asString"></ngx-monaco-editor>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</section>
