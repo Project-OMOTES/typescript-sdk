@@ -7,7 +7,7 @@
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": [],
+      "dependsOn": ["^build"],
       "options": {
         "outputPath": "dist/sdk",
         "main": "sdk/src/index.ts",
