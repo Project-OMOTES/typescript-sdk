@@ -1,10 +1,7 @@
 import { Connection, connect } from 'amqplib';
-import { from } from 'rxjs';
 import { Job } from './Job';
-import { ProgressHandler } from './handlers/ProgressHandler';
-import { ResultsHandler } from './handlers/ResultsHandler';
-import { StatusHandler } from './handlers/StatusHandler';
-import { getProgressQueue, getResultsQueue, getStatusQueue, getSubmissionQueue } from './queue';
+import { getChannel } from './channel';
+import { getSubmissionQueue } from './queue';
 import { JobTypeName, OmotesSDKOptions } from './types';
 
 export class OmotesSDK {
@@ -24,32 +21,14 @@ export class OmotesSDK {
       username: this.options.rabbitMQUsername,
       password: this.options.rabbitMQPassword,
       port: this.options.rabbitMQPort,
+      vhost: 'omotes',
     });
   }
 
-  public async submitJob(type: JobTypeName, esdl: string) {
+  public async createJob(type: JobTypeName, esdl: string) {
     const queue = getSubmissionQueue(type);
-    const job = new Job(type, esdl);
-    const channel = await this.getChannel(queue);
-    channel.sendToQueue(queue, Buffer.from(job.toBuffer()));
+    const channel = await getChannel(this.connection, queue);
+    const job = new Job(type, esdl, this.connection, channel);
     return job;
-  }
-
-  public getProgressHandler(job: Job) {
-    return new ProgressHandler(job, from(this.getChannel(getProgressQueue(job))));
-  }
-
-  public getResultsHandler(job: Job) {
-    return new ResultsHandler(job, from(this.getChannel(getResultsQueue(job))));
-  }
-
-  public getStatusHandler(job: Job) {
-    return new StatusHandler(job, from(this.getChannel(getStatusQueue(job))));
-  }
-
-  private async getChannel(queue: string) {
-    const channel = await this.connection.createChannel();
-    await channel.assertQueue(queue);
-    return channel;
   }
 }

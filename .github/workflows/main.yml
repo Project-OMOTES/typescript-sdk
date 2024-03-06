@@ -1,12 +1,13 @@
-name: CI
+name: Build
 on:
   push:
     branches:
       - main
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  main:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,4 +20,6 @@ jobs:
           cache: 'npm'
       - uses: arduino/setup-protoc@v3
       - run: npm ci
-      - run: npx nx affected -t build --parallel=3 --with-deps
+      - run: npx nx affected -t lint --parallel=3 --exclude=demo,demo-server
+      - run: npx nx affected -t test --parallel=3 --exclude=demo,demo-server
+      - run: npx nx affected -t build --parallel=3 --exclude=demo,demo-server

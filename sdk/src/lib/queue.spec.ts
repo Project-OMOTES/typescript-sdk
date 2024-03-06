@@ -1,27 +1,32 @@
 import { Job } from './Job';
-import { getProgressQueue, getResultsQueue, getStatusQueue, getSubmissionQueue } from './queue';
+import { getCancelQueue, getProgressQueue, getResultQueue, getStatusQueue, getSubmissionQueue } from './queue';
 
 describe('Queue functions', () => {
-  const mockJob = new Job('grow_simulator', 'esdl');
+  const mockJob = { uuid: 'foo' } as unknown as Job;
   const mockType = 'grow_simulator';
 
-  test('getSubmissionQueue returns correct queue name', () => {
+  it('getSubmissionQueue returns correct queue name', () => {
     const result = getSubmissionQueue(mockType);
-    expect(result).toEqual(`job_submissions.${mockType}`);
+    expect(result).toEqual(`job_submissions.grow_simulator`);
   });
 
-  test('getProgressQueue returns correct queue name', () => {
+  it('getProgressQueue returns correct queue name', () => {
     const result = getProgressQueue(mockJob);
-    expect(result).toEqual(`jobs.${mockJob.uuid}.progress`);
+    expect(result).toEqual(`jobs.foo.progress`);
   });
 
-  test('getResultsQueue returns correct queue name', () => {
-    const result = getResultsQueue(mockJob);
-    expect(result).toEqual(`jobs.${mockJob.uuid}.results`);
+  it('getResultsQueue returns correct queue name', () => {
+    const result = getResultQueue(mockJob);
+    expect(result).toEqual(`jobs.foo.result`);
   });
 
-  test('getStatusQueue returns correct queue name', () => {
+  it('getStatusQueue returns correct queue name', () => {
     const result = getStatusQueue(mockJob);
-    expect(result).toEqual(`jobs.${mockJob.uuid}.status`);
+    expect(result).toEqual(`jobs.foo.status`);
+  });
+
+  it('getCancelQueue returns correct queue name', () => {
+    const result = getCancelQueue(mockJob);
+    expect(result).toEqual(`jobs.foo.cancel`);
   });
 });

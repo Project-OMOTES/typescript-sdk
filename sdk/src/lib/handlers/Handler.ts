@@ -17,7 +17,9 @@ export abstract class Handler {
               channel.ack(message);
             }
           });
-          return () => channel.close();
+          return () => {
+            channel.deleteQueue(this.queue);
+          };
         }).pipe(takeUntil(this.close$));
       }),
     )
