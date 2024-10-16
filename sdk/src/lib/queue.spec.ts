@@ -1,13 +1,12 @@
 import { Job } from './Job';
-import { getCancelQueue, getProgressQueue, getResultQueue, getStatusQueue, getSubmissionQueue } from './queue';
+import { getCancellationsQueue, getProgressQueue, getResultQueue, getStatusQueue, getSubmissionsQueue } from './queue';
 
 describe('Queue functions', () => {
   const mockJob = { uuid: 'foo' } as unknown as Job;
-  const mockType = 'grow_simulator';
 
   it('getSubmissionQueue returns correct queue name', () => {
-    const result = getSubmissionQueue(mockType);
-    expect(result).toEqual(`job_submissions.grow_simulator`);
+    const result = getSubmissionsQueue();
+    expect(result).toEqual(`job_submissions`);
   });
 
   it('getProgressQueue returns correct queue name', () => {
@@ -26,7 +25,7 @@ describe('Queue functions', () => {
   });
 
   it('getCancelQueue returns correct queue name', () => {
-    const result = getCancelQueue(mockJob);
-    expect(result).toEqual(`jobs.foo.cancel`);
+    const result = getCancellationsQueue();
+    expect(result).toEqual(`job_cancellations`);
   });
 });

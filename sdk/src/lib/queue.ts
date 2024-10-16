@@ -1,8 +1,7 @@
 import { Job } from './Job';
-import { JobTypeName } from './types';
 
-export function getSubmissionQueue(forType: JobTypeName) {
-  return `job_submissions.${forType}`;
+export function getSubmissionsQueue() {
+  return `job_submissions`;
 }
 
 export function getProgressQueue(job: Job) {
@@ -17,6 +16,6 @@ export function getStatusQueue(job: Job) {
   return `jobs.${job.uuid}.status`;
 }
 
-export function getCancelQueue(job: Job) {
-  return `jobs.${job.uuid}.cancel`;
+export function getCancellationsQueue() {
+  return `job_cancellations`;
 }
