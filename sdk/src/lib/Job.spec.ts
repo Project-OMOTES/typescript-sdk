@@ -20,7 +20,7 @@ describe('Job', () => {
   describe('#start', () => {
     it('should send job submission', () => {
       job.start();
-      expect(channel.sendToQueue).toHaveBeenCalledWith('job_submissions.grow_simulator', expect.any(Buffer));
+      expect(channel.sendToQueue).toHaveBeenCalledWith('job_submissions.grow_simulator', expect.any(Buffer), { persistent: true });
       const submission = channel.sendToQueue.mock.calls[0][1];
       const message = JobSubmission.deserializeBinary(submission);
       expect(message.toObject()).toEqual(expect.objectContaining({
@@ -33,7 +33,7 @@ describe('Job', () => {
   describe('#cancel', () => {
     it('should send job cancel', () => {
       job.cancel();
-      expect(channel.sendToQueue).toHaveBeenCalledWith('job_submissions.grow_simulator', expect.any(Buffer));
+      expect(channel.sendToQueue).toHaveBeenCalledWith('job_submissions.grow_simulator', expect.any(Buffer), { persistent: true });
       const submission = channel.sendToQueue.mock.calls[0][1];
       const message = JobCancel.deserializeBinary(submission);
       expect(message.toObject()).toEqual(expect.objectContaining({
