@@ -1,4 +1,4 @@
-import { JobCancel, JobSubmission } from '@omotes/proto';
+import { JobCancel, JobSubmission, Workflow } from '@omotes/proto';
 import { Channel, Connection } from 'amqplib';
 import { from } from 'rxjs';
 import { uuidv7 } from 'uuidv7';
@@ -7,14 +7,13 @@ import { ProgressHandler } from './handlers/ProgressHandler';
 import { ResultHandler } from './handlers/ResultHandler';
 import { StatusHandler } from './handlers/StatusHandler';
 import { getCancellationsQueue, getProgressQueue, getResultQueue, getStatusQueue, getSubmissionsQueue } from './queue';
-import { JobTypeName } from './types';
 
 export class Job {
   public readonly uuid = uuidv7();
   private readonly jobSubmission = new JobSubmission();
 
   constructor(
-    public readonly type: JobTypeName,
+    public readonly type: Workflow.AsObject['typeName'],
     private readonly esdl: string,
     private readonly conn: Connection,
     private readonly channel: Channel,
