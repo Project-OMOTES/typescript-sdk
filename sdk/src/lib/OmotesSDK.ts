@@ -40,8 +40,8 @@ export class OmotesSDK {
   }
 
   public async getProfile(
-    dbName: string, host: string, port: number, measurement: string, field: string, filterId: string
+    dbName: string, host: string, port: number, measurement: string, field: string
   ) {
-    return getProfile(dbName, host, port, measurement, field, filterId, this.options.influxUser, this.options.influxPassword);
+    return getProfile(dbName, host, port, measurement, field, this.options.influxUser, this.options.influxPassword);
   }
 }
