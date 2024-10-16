@@ -36,9 +36,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          npx nx affected -t lint --parallel=3 --exclude=demo,demo-server
-          npx nx affected -t test --parallel=3 --exclude=demo,demo-server
-          npx nx affected -t build --parallel=3 --exclude=demo,demo-server
+          npx nx run sdk:build
           cd dist/sdk
           npm --no-git-tag-version --force version from-git
           npm publish --provenance --access public
