@@ -6,7 +6,7 @@ import { getChannel } from './channel';
 import { ProgressHandler } from './handlers/ProgressHandler';
 import { ResultHandler } from './handlers/ResultHandler';
 import { StatusHandler } from './handlers/StatusHandler';
-import { getProgressQueue, getResultQueue } from './queue';
+import { getProgressQueue, getResultQueue, getStatusQueue } from './queue';
 import { JobTypeName } from './types';
 
 export class Job {
@@ -36,15 +36,20 @@ export class Job {
   }
 
   public getProgressHandler() {
-    return new ProgressHandler(this, from(getChannel(this.conn, getProgressQueue(this))));
+    return new ProgressHandler(this, from(this.getChannelInstance(this.conn, getProgressQueue(this))));
   }
 
   public getStatusHandler() {
-    return new StatusHandler(this, from(getChannel(this.conn, getProgressQueue(this))));
+    return new StatusHandler(this, from(this.getChannelInstance(this.conn, getStatusQueue(this))));
   }
 
   public getResultHandler() {
-    return new ResultHandler(this, from(getChannel(this.conn, getResultQueue(this))));
+    return new ResultHandler(this, from(this.getChannelInstance(this.conn, getResultQueue(this))));
+  }
+
+  private async getChannelInstance(connection: Connection, channelName: string) {
+    const { channel } = await getChannel(connection, channelName);
+    return channel;
   }
 
   private toBuffer(message: JobSubmission | JobCancel) {

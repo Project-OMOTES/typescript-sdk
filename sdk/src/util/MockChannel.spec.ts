@@ -13,9 +13,11 @@ export class MockChannel<T extends jspb.Message> {
   });
   public close = jest.fn();
   public ack = jest.fn();
-  public assertQueue = jest.fn().mockResolvedValue(null);
+  public assertExchange = jest.fn().mockResolvedValue({ exchange: 'exchange' });
+  public assertQueue = jest.fn().mockResolvedValue({ queue: 'queue' });
   public deleteQueue = jest.fn();
   public sendToQueue = jest.fn();
+  public bindQueue = jest.fn();
 
   public pushMessage(message: T) {
     if (this.pushFn) {

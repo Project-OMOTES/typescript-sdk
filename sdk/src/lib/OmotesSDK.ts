@@ -28,7 +28,7 @@ export class OmotesSDK {
 
   public async createJob(type: JobTypeName, esdl: string) {
     const queue = getSubmissionQueue(type);
-    const channel = await getChannel(this.connection, queue);
+    const { channel } = await getChannel(this.connection, queue);
     const job = new Job(type, esdl, this.connection, channel);
     return job;
   }

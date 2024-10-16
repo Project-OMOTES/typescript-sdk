@@ -10,9 +10,10 @@ describe('getChannel', () => {
   });
 
   it('should create a channel', async () => {
-    const channel = await getChannel(connection as unknown as Connection, 'queue');
+    const { channel } = await getChannel(connection as unknown as Connection, 'queue');
     expect(channel).toBeDefined();
     expect(connection.createChannel).toHaveBeenCalled();
     expect(connection.channel.assertQueue).toHaveBeenCalledWith('queue', { durable: true });
+    expect(connection.channel.assertExchange).toHaveBeenCalledWith('omotes_exchange', 'direct');
   });
 });

@@ -2,6 +2,8 @@ import { Connection } from 'amqplib';
 
 export async function getChannel(connection: Connection, queueName: string) {
   const channel = await connection.createChannel();
-  await channel.assertQueue(queueName, { durable: true });
-  return channel;
+  const exchange = await channel.assertExchange('omotes_exchange', 'direct');
+  const queue = await channel.assertQueue(queueName, { durable: true });
+  await channel.bindQueue(queue.queue, exchange.exchange, queueName);
+  return { channel, exchange };
 }
