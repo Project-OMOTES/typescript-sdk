@@ -6,7 +6,6 @@ export async function getProfile(
   port: number,
   measurement: string,
   field: string,
-  filterId: string,
   username: string,
   password: string
 ) {
@@ -22,11 +21,10 @@ export async function getProfile(
         fields: {
           [field]: FieldType.FLOAT
         },
-        tags: ['output_esdl_id']
+        tags: []
       }
     ]
   });
-  // @TODO: Filter on column assetId
-  const query = `select ${escape.quoted(field)} as value, output_esdl_id from ${escape.quoted(measurement)} where output_esdl_id = $filterId;`;
-  return db.query<{ value: number, time: INanoDate }>(query, { placeholders: { filterId } });
+  const query = `select ${escape.quoted(field)} as value, output_esdl_id from ${escape.quoted(measurement)};`;
+  return db.query<{ value: number, time: INanoDate }>(query);
 }
