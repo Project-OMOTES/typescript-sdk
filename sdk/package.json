@@ -1,6 +1,7 @@
 {
   "name": "@omotes/sdk",
   "version": "0.0.4",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Project-OMOTES/typescript-sdk"
