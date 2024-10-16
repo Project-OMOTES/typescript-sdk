@@ -26,13 +26,13 @@ export class Job {
   }
 
   public start() {
-    this.channel.sendToQueue(`job_submissions.${this.type}`, this.toBuffer(this.jobSubmission));
+    this.channel.sendToQueue(`job_submissions.${this.type}`, this.toBuffer(this.jobSubmission), { persistent: true });
   }
 
   public cancel() {
     const cancel = new JobCancel();
     cancel.setUuid(this.uuid);
-    this.channel.sendToQueue(`job_submissions.${this.type}`, this.toBuffer(cancel));
+    this.channel.sendToQueue(`job_submissions.${this.type}`, this.toBuffer(cancel), { persistent: true });
   }
 
   public getProgressHandler() {
