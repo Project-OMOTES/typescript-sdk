@@ -1,3 +1,5 @@
+export * from '@omotes/proto';
+
 export * from './lib/channel';
 export * from './lib/handlers/ProgressHandler';
 export * from './lib/handlers/ResultHandler';
