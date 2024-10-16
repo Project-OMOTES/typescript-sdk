@@ -19,6 +19,7 @@ describe('getChannel', () => {
 
   it('should correctly amend routing key', async () => {
     await getChannel(connection as unknown as Connection, 'queue', 'routingKey');
-    expect(connection.channel.assertQueue).toHaveBeenCalledWith('queue.routingKey', { durable: true });
+    expect(connection.channel.assertQueue).toHaveBeenCalledWith('queue', { durable: true });
+    expect(connection.channel.bindQueue).toHaveBeenCalledWith('queue', 'exchange', 'routingKey');
   });
 });

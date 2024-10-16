@@ -5,7 +5,7 @@ import { AvailableWorkflowsHandler } from './handlers/AvailableWorkflowsHandler'
 import { RequestAvailableWorkflowsHandler } from './handlers/RequestAvailableWorkflowsHandler';
 
 export async function setupAvailableWorkflows(connection: Connection, clientId: string) {
-  const availableChannel$ = from(getChannel(connection, 'available_workflows', clientId)).pipe(
+  const availableChannel$ = from(getChannel(connection, `available_workflows.${clientId}`, 'available_workflows')).pipe(
     map(({ channel }) => channel)
   );
   const { channel: requestChannel } = await getChannel(connection, 'request_available_workflows');
