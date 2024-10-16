@@ -2,7 +2,7 @@ import { Connection, connect } from 'amqplib';
 import { Job } from './Job';
 import { getChannel } from './channel';
 import { getProfile } from './profiles';
-import { getSubmissionQueue } from './queue';
+import { getSubmissionsQueue } from './queue';
 import { JobTypeName, OmotesSDKOptions } from './types';
 
 export class OmotesSDK {
@@ -27,8 +27,8 @@ export class OmotesSDK {
   }
 
   public async createJob(type: JobTypeName, esdl: string) {
-    const queue = getSubmissionQueue(type);
-    const channel = await getChannel(this.connection, queue);
+    const queue = getSubmissionsQueue();
+    const { channel } = await getChannel(this.connection, queue);
     const job = new Job(type, esdl, this.connection, channel);
     return job;
   }
