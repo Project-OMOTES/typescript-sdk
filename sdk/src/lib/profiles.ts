@@ -25,6 +25,6 @@ export async function getProfile(
       }
     ]
   });
-  const query = `select ${escape.quoted(field)} as value, output_esdl_id from ${escape.quoted(measurement)};`;
+  const query = `select ${escape.quoted(field)} as value from ${escape.quoted(measurement)};`;
   return db.query<{ value: number, time: INanoDate }>(query);
 }
