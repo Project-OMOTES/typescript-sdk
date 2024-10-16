@@ -45,6 +45,11 @@ export class Job {
     return this;
   }
 
+  public setJobReference(reference: string) {
+    this.jobSubmission.setJobReference(reference);
+    return this;
+  }
+
   public getProgressHandler() {
     return new ProgressHandler(this, from(this.getChannelInstance(this.conn, getProgressQueue(this))));
   }
