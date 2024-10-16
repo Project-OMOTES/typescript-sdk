@@ -2,7 +2,7 @@ import { Workflow } from '@omotes/proto';
 import { Connection, connect } from 'amqplib';
 import { Observable } from 'rxjs';
 import { getChannel } from './channel';
-import { Job, ParamsDict } from './Job';
+import { Job } from './Job';
 import { getProfile } from './profiles';
 import { getSubmissionsQueue } from './queue';
 import { OmotesSDKOptions } from './types';
@@ -32,10 +32,10 @@ export class OmotesSDK {
     this.workflows = await setupAvailableWorkflows(this.connection, this.options.id);
   }
 
-  public async createJob(type: Workflow.AsObject['typeName'], esdl: string, params?: ParamsDict) {
+  public async createJob(type: Workflow.AsObject['typeName'], esdl: string) {
     const queue = getSubmissionsQueue();
     const { channel } = await getChannel(this.connection, queue);
-    const job = new Job(type, esdl, this.connection, channel, params);
+    const job = new Job(type, esdl, this.connection, channel);
     return job;
   }
 

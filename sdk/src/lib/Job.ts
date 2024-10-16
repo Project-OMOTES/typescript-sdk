@@ -21,25 +21,28 @@ export class Job {
     private readonly esdl: string,
     private readonly conn: Connection,
     private readonly channel: Channel,
-    params?: ParamsDict
   ) {
     this.jobSubmission.setUuid(this.uuid);
     this.jobSubmission.setWorkflowType(type);
     this.jobSubmission.setEsdl(this.esdl);
     this.jobSubmission.setTimeoutMs(0);
-    if (params) {
-      this.jobSubmission.setParamsDict(Struct.fromJavaScript(params));
-    }
   }
 
   public start() {
     this.channel.sendToQueue(getSubmissionsQueue(), this.toBuffer(this.jobSubmission), { persistent: true });
+    return this;
   }
 
   public cancel() {
     const cancel = new JobCancel();
     cancel.setUuid(this.uuid);
     this.channel.sendToQueue(getCancellationsQueue(), this.toBuffer(cancel), { persistent: true });
+    return this;
+  }
+
+  public setParams(params: ParamsDict) {
+    this.jobSubmission.setParamsDict(Struct.fromJavaScript(params));
+    return this;
   }
 
   public getProgressHandler() {
@@ -61,25 +64,5 @@ export class Job {
 
   private toBuffer(message: JobSubmission | JobCancel) {
     return Buffer.from(message.serializeBinary());
-  }
-
-  private stripDatesFromParams(params: ParamsDict) {
-    const newParams: ParamsDict = {};
-    for (const [key, value] of Object.entries(params)) {
-      if (value instanceof Date) {
-        newParams[key] = value.toISOString();
-      } else {
-        newParams[key] = value;
-      }
-    }
-    return newParams;
-    // const newObj: T = {} as T;
-    // for (const [key, value] of Object.entries(params)) {
-    //   if (value instanceof Date) {
-    //     newObj[key] = value.toISOString();
-    //   } else {
-    //     newObj[key] = value;
-    //   }
-    // }
   }
 }
