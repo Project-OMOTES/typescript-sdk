@@ -1,6 +1,6 @@
 {
   "name": "@omotes/sdk",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Project-OMOTES/typescript-sdk"
@@ -10,8 +10,9 @@
     "amqplib": "0.10.3",
     "uuidv7": "0.6.3",
     "tslib": "2.6.2",
-    "@omotes/proto": "0.0.4",
-    "google-protobuf": "^3.21.2"
+    "@omotes/proto": "0.0.5",
+    "google-protobuf": "^3.21.2",
+    "influx": "5.9.3"
   },
   "type": "module",
   "main": "./src/index.js",

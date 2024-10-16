@@ -28,7 +28,7 @@
     },
     "@nx/js:tsc": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": [],
       "inputs": ["default", "^default"]
     },
     "@nx/esbuild:esbuild": {
