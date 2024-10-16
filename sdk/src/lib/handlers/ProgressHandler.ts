@@ -1,9 +1,9 @@
 import { JobProgressUpdate } from '@omotes/proto';
 import { map } from 'rxjs';
 import { getProgressQueue } from '../queue';
-import { Handler } from './Handler';
+import { JobHandler } from './JobHandler';
 
-export class ProgressHandler extends Handler {
+export class ProgressHandler extends JobHandler {
   protected override queue: string = getProgressQueue(this.job);
 
   public getProgress() {

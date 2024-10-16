@@ -1,5 +1,6 @@
-import { JobCancel, JobSubmission } from '@omotes/proto';
+import { JobCancel, JobSubmission, Workflow } from '@omotes/proto';
 import { Channel, Connection } from 'amqplib';
+import { JavaScriptValue, Struct } from 'google-protobuf/google/protobuf/struct_pb';
 import { from } from 'rxjs';
 import { uuidv7 } from 'uuidv7';
 import { getChannel } from './channel';
@@ -7,14 +8,16 @@ import { ProgressHandler } from './handlers/ProgressHandler';
 import { ResultHandler } from './handlers/ResultHandler';
 import { StatusHandler } from './handlers/StatusHandler';
 import { getCancellationsQueue, getProgressQueue, getResultQueue, getStatusQueue, getSubmissionsQueue } from './queue';
-import { JobTypeName } from './types';
+
+
+export type ParamsDict = { [key: string]: JavaScriptValue };
 
 export class Job {
   public readonly uuid = uuidv7();
   private readonly jobSubmission = new JobSubmission();
 
   constructor(
-    public readonly type: JobTypeName,
+    public readonly type: Workflow.AsObject['typeName'],
     private readonly esdl: string,
     private readonly conn: Connection,
     private readonly channel: Channel,
@@ -27,12 +30,24 @@ export class Job {
 
   public start() {
     this.channel.sendToQueue(getSubmissionsQueue(), this.toBuffer(this.jobSubmission), { persistent: true });
+    return this;
   }
 
   public cancel() {
     const cancel = new JobCancel();
     cancel.setUuid(this.uuid);
     this.channel.sendToQueue(getCancellationsQueue(), this.toBuffer(cancel), { persistent: true });
+    return this;
+  }
+
+  public setParams(params: ParamsDict) {
+    this.jobSubmission.setParamsDict(Struct.fromJavaScript(params));
+    return this;
+  }
+
+  public setJobReference(reference: string) {
+    this.jobSubmission.setJobReference(reference);
+    return this;
   }
 
   public getProgressHandler() {

@@ -1,9 +1,9 @@
 import { JobStatusUpdate } from '@omotes/proto';
 import { Observable, map } from 'rxjs';
 import { getStatusQueue } from '../queue';
-import { Handler } from './Handler';
+import { JobHandler } from './JobHandler';
 
-export class StatusHandler extends Handler {
+export class StatusHandler extends JobHandler {
   protected override queue: string = getStatusQueue(this.job);
 
   public getStatus(): Observable<JobStatusUpdate.JobStatusMap[keyof JobStatusUpdate.JobStatusMap]> {

@@ -1,12 +1,17 @@
+import { Workflow } from '@omotes/proto';
 import { Connection, connect } from 'amqplib';
-import { Job } from './Job';
+import { Observable } from 'rxjs';
 import { getChannel } from './channel';
+import { Job } from './Job';
 import { getProfile } from './profiles';
 import { getSubmissionsQueue } from './queue';
-import { JobTypeName, OmotesSDKOptions } from './types';
+import { OmotesSDKOptions } from './types';
+import { setupAvailableWorkflows } from './workflow';
 
 export class OmotesSDK {
   private _connection: Connection | null = null;
+  public workflows!: Observable<Workflow.AsObject[]>;
+
   private get connection() {
     if (!this._connection) {
       throw new Error(`OmotesSDK is not connected. Call connect() first.`);
@@ -24,9 +29,10 @@ export class OmotesSDK {
       port: this.options.rabbitMQPort,
       vhost: 'omotes',
     });
+    this.workflows = await setupAvailableWorkflows(this.connection, this.options.id);
   }
 
-  public async createJob(type: JobTypeName, esdl: string) {
+  public async createJob(type: Workflow.AsObject['typeName'], esdl: string) {
     const queue = getSubmissionsQueue();
     const { channel } = await getChannel(this.connection, queue);
     const job = new Job(type, esdl, this.connection, channel);

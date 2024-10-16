@@ -1,9 +1,9 @@
 import { JobResult } from '@omotes/proto';
 import { first, map } from 'rxjs';
 import { getResultQueue } from '../queue';
-import { Handler } from './Handler';
+import { JobHandler } from './JobHandler';
 
-export class ResultHandler extends Handler {
+export class ResultHandler extends JobHandler {
   protected override queue: string = getResultQueue(this.job);
 
   public getResult() {

@@ -62,4 +62,27 @@ describe('Job', () => {
       expect(handler).toBeInstanceOf(ResultHandler);
     });
   });
+
+  describe('params and job reference', () => {
+    it('should correctly set params', () => {
+      job.setParams({ foo: 'bar', baz: 42 });
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const struct = getSubmissionFromJob(job).getParamsDict()!;
+      expect(struct.toJavaScript()).toEqual({ foo: 'bar', baz: 42 });
+    });
+
+    it('should correctly set job reference', () => {
+      job.setJobReference('job_reference');
+      expect(getSubmissionFromJob(job).getJobReference()).toBe('job_reference');
+    });
+
+    it('should allow chained method calls', () => {
+      expect(() => job.setParams({}).setJobReference('')).not.toThrow();
+    });
+  });
 });
+
+function getSubmissionFromJob(job: Job) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (job as any).jobSubmission as JobSubmission;
+}
