@@ -18,6 +18,6 @@ describe('setupAvailableWorkflows', () => {
     const assertCalls = connection.channel.assertQueue.mock.calls.map(([queueName]) => {
       return queueName;
     });
-    expect(assertCalls).toEqual(['available_workflows.client_id', 'request_available_workflows']);
+    expect(assertCalls).toEqual(['available_workflows.client_id']);
   })
 });

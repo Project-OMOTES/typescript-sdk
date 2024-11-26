@@ -29,7 +29,9 @@ export class OmotesSDK {
       port: this.options.rabbitMQPort,
       vhost: 'omotes',
     });
-    this.workflows = await setupAvailableWorkflows(this.connection, this.options.id);
+    const { trigger, workflows } = await setupAvailableWorkflows(this.connection, this.options.id);
+    this.workflows = workflows;
+    trigger();
   }
 
   public async createJob(type: Workflow.AsObject['typeName'], esdl: string) {
