@@ -14,7 +14,7 @@ describe('getChannel', () => {
     expect(channel).toBeDefined();
     expect(connection.createChannel).toHaveBeenCalled();
     expect(connection.channel.assertQueue).toHaveBeenCalledWith('queue', { durable: true });
-    expect(connection.channel.assertExchange).toHaveBeenCalledWith('omotes_exchange', 'direct');
+    expect(connection.channel.assertExchange).toHaveBeenCalledWith('omotes_exchange', 'direct', { durable: false });
   });
 
   it('should correctly amend routing key', async () => {
