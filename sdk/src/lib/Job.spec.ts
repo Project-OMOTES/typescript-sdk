@@ -71,6 +71,14 @@ describe('Job', () => {
       expect(struct.toJavaScript()).toEqual({ foo: 'bar', baz: 42 });
     });
 
+    it('should correctly set date params', () => {
+      const date = new Date(123456789);
+      job.setParams({ date });
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const struct = getSubmissionFromJob(job).getParamsDict()!;
+      expect(struct.toJavaScript()).toEqual({ date: 123456.789 });
+    });
+
     it('should correctly set job reference', () => {
       job.setJobReference('job_reference');
       expect(getSubmissionFromJob(job).getJobReference()).toBe('job_reference');
