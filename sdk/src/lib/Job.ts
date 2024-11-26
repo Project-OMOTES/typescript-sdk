@@ -41,6 +41,11 @@ export class Job {
   }
 
   public setParams(params: ParamsDict) {
+    for (const [key, value] of Object.entries(params)) {
+      if (value instanceof Date) {
+        params[key] = this.dateToTimestamp(value);
+      }
+    }
     this.jobSubmission.setParamsDict(Struct.fromJavaScript(params));
     return this;
   }
@@ -69,5 +74,9 @@ export class Job {
 
   private toBuffer(message: JobSubmission | JobCancel) {
     return Buffer.from(message.serializeBinary());
+  }
+
+  private dateToTimestamp(date: Date) {
+    return date.getTime() / 1000;
   }
 }
