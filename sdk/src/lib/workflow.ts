@@ -10,7 +10,6 @@ export async function setupAvailableWorkflows(connection: Connection, clientId: 
   );
   const workflowsHandler = new AvailableWorkflowsHandler(availableChannel$, clientId);
   const requestChannel = await connection.createChannel();
-  requestChannel.sendToQueue('request_available_workflows', Buffer.from(new RequestAvailableWorkflows().serializeBinary()));
   return {
     workflows: workflowsHandler.getWorkflows().pipe(shareReplay(1)),
     trigger: () => requestChannel.sendToQueue('request_available_workflows', Buffer.from(new RequestAvailableWorkflows().serializeBinary()))
