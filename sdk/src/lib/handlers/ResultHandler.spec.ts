@@ -28,7 +28,8 @@ describe('ResultsHandler', () => {
           uuid: 'uuid',
           logs: 'logs',
           outputEsdl: 'output_esdl',
-          resultType: JobResult.ResultType.SUCCEEDED
+          resultType: JobResult.ResultType.SUCCEEDED,
+          esdlMessagesList: []
         });
         done();
       });
@@ -37,6 +38,7 @@ describe('ResultsHandler', () => {
       message.setLogs('logs');
       message.setOutputEsdl('output_esdl');
       message.setResultType(JobResult.ResultType.SUCCEEDED);
+      message.setEsdlMessagesList([]);
       channel.pushMessage(message);
     });
 
@@ -57,6 +59,7 @@ describe('ResultsHandler', () => {
       message.setUuid('uuid');
       message.setLogs('logs');
       message.setResultType(JobResult.ResultType.ERROR);
+      message.setEsdlMessagesList([]);
       channel.pushMessage(message);
     })
   });
