@@ -29,7 +29,7 @@ describe('ResultsHandler', () => {
           logs: 'logs',
           outputEsdl: 'output_esdl',
           resultType: JobResult.ResultType.SUCCEEDED,
-          esdlMessagesList: []
+          esdlMessagesList: [],
         });
         done();
       });

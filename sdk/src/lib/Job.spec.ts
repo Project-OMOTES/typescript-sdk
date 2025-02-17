@@ -88,6 +88,12 @@ describe('Job', () => {
       expect(() => job.setParams({}).setJobReference('')).not.toThrow();
     });
   });
+
+  describe('timeout', () => {
+    it('should default to two hours', () => {
+      expect(getSubmissionFromJob(job).getTimeoutMs()).toBe(1000 * 60 * 60 * 2);
+    });
+  });
 });
 
 function getSubmissionFromJob(job: Job) {

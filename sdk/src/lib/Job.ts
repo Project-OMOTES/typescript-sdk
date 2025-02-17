@@ -25,7 +25,7 @@ export class Job {
     this.jobSubmission.setUuid(this.uuid);
     this.jobSubmission.setWorkflowType(type);
     this.jobSubmission.setEsdl(this.esdl);
-    this.jobSubmission.setTimeoutMs(0);
+    this.jobSubmission.setTimeoutMs(1000 * 60 * 60 * 2); // for now, hard code two hours.
   }
 
   public start() {
