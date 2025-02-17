@@ -28,7 +28,8 @@ describe('ResultsHandler', () => {
           uuid: 'uuid',
           logs: 'logs',
           outputEsdl: 'output_esdl',
-          resultType: JobResult.ResultType.SUCCEEDED
+          resultType: JobResult.ResultType.SUCCEEDED,
+          esdlMessagesList: [],
         });
         done();
       });
