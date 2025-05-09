@@ -1,4 +1,4 @@
-import { JobCancel, JobSubmission, Workflow } from '@omotes/proto';
+import { JobDelete, JobSubmission, Workflow } from '@omotes/proto';
 import { Channel, Connection } from 'amqplib';
 import { JavaScriptValue, Struct } from 'google-protobuf/google/protobuf/struct_pb';
 import { from } from 'rxjs';
@@ -33,10 +33,10 @@ export class Job {
     return this;
   }
 
-  public cancel() {
-    const cancel = new JobCancel();
-    cancel.setUuid(this.uuid);
-    this.channel.sendToQueue(getCancellationsQueue(), this.toBuffer(cancel), { persistent: true });
+  public delete() {
+    const jobDelete = new JobDelete();
+    jobDelete.setUuid(this.uuid);
+    this.channel.sendToQueue(getCancellationsQueue(), this.toBuffer(jobDelete), { persistent: true });
     return this;
   }
 
@@ -72,7 +72,7 @@ export class Job {
     return channel;
   }
 
-  private toBuffer(message: JobSubmission | JobCancel) {
+  private toBuffer(message: JobSubmission | JobDelete) {
     return Buffer.from(message.serializeBinary());
   }
 

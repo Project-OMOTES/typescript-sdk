@@ -26,6 +26,6 @@ describe('Queue functions', () => {
 
   it('getCancelQueue returns correct queue name', () => {
     const result = getCancellationsQueue();
-    expect(result).toEqual(`job_cancellations`);
+    expect(result).toEqual(`job_deletions`);
   });
 });

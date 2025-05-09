@@ -1,4 +1,4 @@
-import { JobCancel, JobSubmission } from '@omotes/proto';
+import { JobDelete, JobSubmission } from '@omotes/proto';
 import { Channel, Connection } from 'amqplib';
 import { MockChannel, MockConnection } from '../util/MockChannel.spec';
 import { Job } from './Job';
@@ -32,10 +32,10 @@ describe('Job', () => {
 
   describe('#cancel', () => {
     it('should send job cancel', () => {
-      job.cancel();
-      expect(channel.sendToQueue).toHaveBeenCalledWith('job_cancellations', expect.any(Buffer), { persistent: true });
+      job.delete();
+      expect(channel.sendToQueue).toHaveBeenCalledWith('job_deletions', expect.any(Buffer), { persistent: true });
       const submission = channel.sendToQueue.mock.calls[0][1];
-      const message = JobCancel.deserializeBinary(submission);
+      const message = JobDelete.deserializeBinary(submission);
       expect(message.toObject()).toEqual(expect.objectContaining({
         uuid: job.uuid
       }));
