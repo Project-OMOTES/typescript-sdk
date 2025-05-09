@@ -17,5 +17,5 @@ export function getStatusQueue(job: Job) {
 }
 
 export function getCancellationsQueue() {
-  return `job_cancellations`;
+  return `job_deletions`;
 }
