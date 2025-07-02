@@ -44,12 +44,18 @@ describe('ResultsHandler', () => {
 
     it('should error when not succeeded', (done) => {
       handler.getResult().subscribe({
-        next: () => {
-          done.fail('Should not have succeeded');
+        next: (result) => {
+        expect(result).toEqual({
+          uuid: 'uuid',
+          logs: 'logs',
+          outputEsdl: '',
+          resultType: JobResult.ResultType.ERROR,
+          esdlMessagesList: [],
+        });
+          done()
         },
-        error: (error) => {
-          expect(error.message).toEqual('Job uuid failed: logs');
-          done();
+        error: () => {
+          done.fail('should not have thrown error')
         },
         complete: () => {
           done.fail('Should not have completed');
