@@ -11,9 +11,6 @@ export class ResultHandler extends JobHandler {
     return messages$.pipe(
       map((message) => {
         const result = JobResult.deserializeBinary(message.content);
-        if (result.getResultType() === JobResult.ResultType.ERROR) {
-          throw new Error(`Job ${result.getUuid()} failed: ${result.getLogs()}`);
-        }
         return result.toObject();
       })
     );
