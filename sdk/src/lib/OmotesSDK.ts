@@ -10,11 +10,20 @@ import { setupAvailableWorkflows } from './workflow';
 
 export class OmotesSDK {
   private _connection: Connection | null = null;
+  private _isConnected = false;
   private _isReconnecting = false;
   private _manualDisconnect = false;
   private readonly workflows$ = new BehaviorSubject<Workflow.AsObject[]>([]);
 
   public get workflows(): Observable<Workflow.AsObject[]> {
+    // Trigger connection attempt if not connected and not already reconnecting
+    if (
+      !this._isConnected &&
+      !this._isReconnecting &&
+      !this._manualDisconnect
+    ) {
+      this.handleReconnect();
+    }
     return this.workflows$.asObservable();
   }
 
@@ -25,7 +34,7 @@ export class OmotesSDK {
     return this._connection as Connection;
   }
 
-  constructor(private readonly options: OmotesSDKOptions) { }
+  constructor(private readonly options: OmotesSDKOptions) {}
 
   public async connect() {
     this._manualDisconnect = false;
@@ -43,15 +52,30 @@ export class OmotesSDK {
     });
 
     this._connection.on('close', () => {
+      this._isConnected = false;
+      this.workflows$.next([]);
       if (!this._manualDisconnect) {
-        console.warn('[OmotesSDK] Connection closed unexpectedly, attempting reconnect...');
+        console.warn(
+          '[OmotesSDK] Connection closed unexpectedly, attempting reconnect...'
+        );
         this.handleReconnect();
       }
     });
 
-    const { trigger, workflows } = await setupAvailableWorkflows(this.connection, this.options.id);
-    workflows.subscribe((wf) => this.workflows$.next(wf));
+    const { trigger, workflows, ready } = await setupAvailableWorkflows(
+      this.connection,
+      this.options.id
+    );
+    workflows.subscribe((wf) => {
+      this.workflows$.next(wf);
+    });
+
+    // Prevents race condition where trigger is called before the channel is ready
+    await ready();
     trigger();
+
+    this._isConnected = true;
+    console.log('[OmotesSDK] Connected successfully');
   }
 
   public async createJob(type: Workflow.AsObject['typeName'], esdl: string) {
@@ -62,13 +86,27 @@ export class OmotesSDK {
   }
 
   public async getProfile(
-    dbName: string, host: string, port: number, measurement: string, field: string
+    dbName: string,
+    host: string,
+    port: number,
+    measurement: string,
+    field: string
   ) {
-    return getProfile(dbName, host, port, measurement, field, this.options.influxUser, this.options.influxPassword);
+    return getProfile(
+      dbName,
+      host,
+      port,
+      measurement,
+      field,
+      this.options.influxUser,
+      this.options.influxPassword
+    );
   }
 
   public async disconnect() {
     this._manualDisconnect = true;
+    this._isConnected = false;
+    this.workflows$.next([]);
     if (this._connection) {
       try {
         await this._connection.close();
@@ -89,7 +127,9 @@ export class OmotesSDK {
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       const delay = Math.min(baseDelay * Math.pow(2, attempt - 1), maxDelay);
-      console.log(`[OmotesSDK] Reconnection attempt ${attempt}/${maxRetries} in ${delay}ms...`);
+      console.log(
+        `[OmotesSDK] Reconnection attempt ${attempt}/${maxRetries} in ${delay}ms...`
+      );
 
       await this.sleep(delay);
 
@@ -99,7 +139,10 @@ export class OmotesSDK {
         this._isReconnecting = false;
         return;
       } catch (err) {
-        console.error(`[OmotesSDK] Reconnection attempt ${attempt} failed:`, (err as Error).message);
+        console.error(
+          `[OmotesSDK] Reconnection attempt ${attempt} failed:`,
+          (err as Error).message
+        );
       }
     }
 
